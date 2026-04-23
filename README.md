@@ -20,7 +20,7 @@ NixOS is declarative, which is great — but editing `config.nix` by hand every 
 ## Install
 
 ```bash
-git clone https://github.com/<you>/nixpm
+git clone git@github.com:OpenCz/nixpm.git
 cd nixpm
 sudo cp nix-pkg.py /usr/local/bin/nixpm
 sudo chmod +x /usr/local/bin/nixpm
