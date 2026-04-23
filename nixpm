@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 import sys
+from pathlib import Path
 
-CONFIG_PATH = "/etc/nixos/config.nix"
+CONFIG_PATH = Path("/etc/nixos/config.nix")
 
 def print_help():
     print("nixpm — add/remove packages in configuration.nix like apt install")
@@ -12,8 +13,38 @@ def print_help():
     print("    nixpm list")
     print("    nixpm search  <term>")
 
+def write_package_to_config(package):
+    content = CONFIG_PATH.read_text()
+    lines = content.split('\n')
+    
+    packages_idx = None
+    for i, line in enumerate(lines):
+        if 'environment.systemPackages = with pkgs; [' in line:
+            packages_idx = i
+            break
+    if packages_idx is None:
+        return False
+    close_bracket_idx = None
+    for i in range(packages_idx + 1, len(lines)):
+        if lines[i].strip() == '];':
+            close_bracket_idx = i
+            break
+    if close_bracket_idx is None:
+        return False
+    indent = "        "
+    lines.insert(close_bracket_idx, f"{indent}{package}")
+    CONFIG_PATH.write_text('\n'.join(lines))
+    return True
+
 def cmd_install(packages):
+    content = CONFIG_PATH.read_text()
     print(f"Installing packages: {packages}")
+    for package in packages:
+        if package in content:
+            print(f"Package {package} is already installed")
+        else:
+            write_package_to_config(package)
+
 
 def cmd_remove(packages):
     print(f"Removing packages: {packages}")
@@ -26,7 +57,6 @@ def error_handler(args):
     if args[1] in ("-h", "--help"):
         print_help()
         sys.exit(0)
-
 
 def main():
     error_handler(sys.argv)
