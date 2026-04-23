@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+
+import sys
+
+CONFIG_PATH = "/etc/nixos/config.nix"
+
+def print_help():
+    print("nixpm — add/remove packages in configuration.nix like apt install")
+    print("Usage:")
+    print("    nixpm install <package> [<package> ...]")
+    print("    nixpm remove  <package> [<package> ...]")
+    print("    nixpm list")
+    print("    nixpm search  <term>")
+
+def cmd_install(packages):
+    print(f"Installing packages: {packages}")
+
+def cmd_remove(packages):
+    print(f"Removing packages: {packages}")
+
+def cmd_list():
+    print("Listing installed packages...")
+
+def main():
+    if len(sys.argv) < 2:
+        print_help()
+        sys.exit(1)
+
+    if sys.argv[1] in ("-h", "--help"):
+        print_help()
+        sys.exit(0)
+
+    command = sys.argv[1]
+    if command == "install":
+        packages = sys.argv[2:]
+        cmd_install(packages)
+    elif command == "remove":
+        packages = sys.argv[2:]
+        cmd_remove(packages)
+    elif command == "list":
+        cmd_list()
+    else:
+        print(f"Unknown command: {command}")
+        print_help()
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
