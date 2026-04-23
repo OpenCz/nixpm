@@ -75,17 +75,6 @@ Edits the config without triggering a rebuild. Useful when batching multiple cha
 
 ---
 
-## Aliases
-
-| Short | Full command |
-|-------|-------------|
-| `i`   | `install`   |
-| `r`, `rm` | `remove` |
-| `ls`, `l` | `list`  |
-| `s`   | `search`    |
-
----
-
 ## Requirements
 
 - NixOS with a `config.nix` at `/etc/nixos/config.nix`
